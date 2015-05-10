@@ -26,7 +26,11 @@ end
 
 function MUI.Initialize( )
 
+	MUI.Output( "Initializing..." )
+
 	MUI.ThemeLoader.LoadThemes( );
 	MUI.ThemeLoader.SetSelected( MUI.Config.ThemeDefault )
+	
+	MUI.Output( "Loaded!" )
 
 end

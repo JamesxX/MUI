@@ -62,6 +62,8 @@ function Errors.CheckArguments( FunctionName, ... )
 		local Given = argument[ 1 ];
 		local RequiredType = argument[ 2 ];
 		
+		if ( not RequiredType ) then continue end
+		
 		if ( Given == nil or type( Given ) ~= RequiredType ) then
 			MUI.Output( "Error calling %s, Argument %u expected type %s, got %s", FunctionName, _, RequiredType, type( Given ) );
 			Good = false;
