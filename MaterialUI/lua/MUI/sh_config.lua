@@ -4,14 +4,14 @@
 --]]-------------------------------------
 
 
-MUI.Config 						= {};
+MUI.Config 				= {};
 
-MUI.Config.Version 				= "1.00";
-MUI.Config.Creator 				= "James Swift";
+MUI.Config.Version 			= "1.00";
+MUI.Config.Creator 			= "James Swift";
 MUI.Config.CallHooks 			= true;
 
 MUI.Config.ThemeFolder 			= "MUI/Themes/";
-MUI.Config.ThemeFolderLocal 	= "Themes/";
+MUI.Config.ThemeFolderLocal 		= "Themes/";
 MUI.Config.ThemeDefault			= "Default";
 MUI.Config.ThemeLoadHook		= "MUI.ThemeLoaded";
 MUI.Config.ThemeChangeHook		= "MUI.ThemeLoaded";
