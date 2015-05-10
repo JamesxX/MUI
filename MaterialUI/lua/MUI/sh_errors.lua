@@ -7,18 +7,24 @@
 MUI.Errors = {};
 local Errors = MUI.Errors;
 
+function Errors.BuildLogTable( )
+	if ( not Errors.Log ) then 
+		Errors.Log = {};
+		return false
+	end
+	return true
+end
+
 function Errors.BuildMessage( sFilename, sNature )
 	return "Error in file " .. sFilename .. " : " .. sNature;
 end
 
 function Errors.Post( sFilename, sNature, ... )
 	if ( MUI.Config.PrintErrors ) then
-		MsgC( MUI.Config.ErrorColor, MUI.Config.ErrorStart, MUI.Config.ColorWhite, Format( Errors.BuildMessage( sFilename, sNature ), ... ), "\n" );
+		MUI.Output( Errors.BuildMessage( sFilename, sNature ), ... );
 	end
 	
-	if ( not Errors.Log ) then 
-		Errors.Log = {};
-	end
+	Errors.BuildLogTable( );
 	
 	table.insert( Errors.Log, {File = sFilename, Nature = sNature} );
 	
@@ -28,10 +34,21 @@ function Errors.Post( sFilename, sNature, ... )
 end
 
 function Errors.GetLast( )
-	if ( not Errors.Log ) then return false; end
+	if ( not Errors.BuildLogTable( ) ) then return false; end
 	return Errors.Log[ table.Count( Errors.Log ) ] or false;
 end
 
 function Errors.ClearLog( )
 	Errors.Log = nil;
 end
+
+function Errors.List()
+	Errors.BuildLogTable( );
+	local i, n = 0, table.getn(Errors.Log);
+	return function ()
+		i = i + 1;
+		if i <= n then
+			return i, Errors.Log[i].File, Errors.Log[i].Nature;
+		end
+	end
+end 

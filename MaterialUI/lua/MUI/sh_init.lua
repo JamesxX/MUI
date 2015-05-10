@@ -20,6 +20,10 @@ include( "sh_errors.lua" );
 include( "sh_themes.lua" );
 include( "sh_hooks.lua" );
 
+function MUI.Output( sOutput, ... )
+	MsgC( MUI.Config.OutputColor, MUI.Config.ErrorStart, MUI.Config.ColorWhite, Format( sOutput, ... ), "\n" );
+end
+
 function MUI.Initialize( )
 
 	MUI.ThemeLoader.LoadThemes( );

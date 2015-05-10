@@ -7,6 +7,14 @@ MUI.ThemeLoader = {};
 local ThemeLoader = MUI.ThemeLoader;
 SetGlobalString( "MUI.ThemeLoader.Selected", "" );
 
+function ThemeLoader.BuildThemeTable( )
+	if not ThemeLoader.Themes then
+		ThemeLoader.Themes = {};
+		return false
+	end
+	return true
+end
+
 function ThemeLoader.SetSelected( sThemeName )
 	sThemeName = tostring( sThemeName );
 	
@@ -41,7 +49,8 @@ function ThemeLoader.GetSelected( )
 end
 
 function ThemeLoader.LoadThemes( )
-	if not ThemeLoader.Themes then ThemeLoader.Themes = {}; end
+
+	ThemeLoader.BuildThemeTable( )
 	
 	local Themes = file.Find( MUI.Config.ThemeFolder .. "*.lua" , "LUA"  );
 	
@@ -49,36 +58,57 @@ function ThemeLoader.LoadThemes( )
 		MUI.Errors.Post( "MUI\\sh_themes.lua", "No themes to load!");
 	end
 	
-	for _, sFileName in pairs( Themes ) do
+	for _, sFilename in pairs( Themes ) do
 		ThemeLoader.LoadTheme( sFilename );
 	end
 end
 
 function ThemeLoader.LoadTheme( sFilename )
 	
-	if not ThemeLoader.Themes then ThemeLoader.Themes = {}; end
+	ThemeLoader.BuildThemeTable( )
 	
-	if ( CLIENT ) then
-		Theme = {};
-		include( MUI.Config.ThemeFolderLocal .. sFilename );
-		
-		if ( not Theme.Name ) then
-			MUI.Errors.Post( MUI.Config.ThemeFolderLocal .. sFilename, "Failed to load theme!");
-			return false;
-		end
-		
-		local sThemeName = Theme.Name;
-		
-		ThemeLoader.Themes[ sThemeName ] = table.Copy( Theme );
-		Theme = nil;
-		
-		if ( MUI.Config.CallHooks ) then
-			hook.Call( MUI.Config.ThemeLoadHook, nil, sFilename, sThemeName, ThemeLoader.Themes[ sThemeName ] );
-		end
-	else
-		AddCSLuaFile( MUI.Config.ThemeFolderLocal .. sFilename );
+	Theme = {};
+	include( MUI.Config.ThemeFolder .. sFilename );
+	
+	if ( not Theme.Name ) then
+		MUI.Errors.Post( MUI.Config.ThemeFolder .. sFilename, "Failed to load theme!");
+		return false;
 	end
+	
+	local sThemeName = Theme.Name;
+	
+	ThemeLoader.Themes[ sThemeName ] = table.Copy( Theme );
+	Theme = nil;
+	
+	if ( ThemeLoader.Themes[ sThemeName ].Initialize ) then
+		ThemeLoader.Themes[ sThemeName ]:Initialize()
+	end
+	
+	if ( MUI.Config.CallHooks ) then
+		hook.Call( MUI.Config.ThemeLoadHook, nil, sFilename, sThemeName, ThemeLoader.Themes[ sThemeName ] );
+	end
+
+	if ( SERVER ) then
+		AddCSLuaFile( MUI.Config.ThemeFolder .. sFilename );
+	end
+	
+	MUI.Output( "The %s theme was loaded!", sThemeName );
 	
 	return true
 
+end
+
+function ThemeLoader.GetTheme( sThemeName )
+	if ( not ThemeLoader.BuildThemeTable( ) ) then return false; end
+	return ThemeLoader.Themes[ sThemeName ] or false;
+end
+
+function ThemeLoader.GetThemes( )
+	if ( not ThemeLoader.BuildThemeTable( ) ) then return false; end
+	return ThemeLoader.Themes;
+end
+
+function ThemeLoader.GetThemeCount( )
+	if ( not ThemeLoader.BuildThemeTable( ) ) then return 0; end
+	return table.Count( ThemeLoader.Themes );
 end

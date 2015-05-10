@@ -5,7 +5,7 @@
 
 hook.Add( MUI.Config.ThemeChangeHook, "Default", function( sThemeName )
 	-- Return false to disallow changing theme
-	return true
+	return true;
 end)
 
 hook.Add( MUI.Config.ThemeLoadHook, "Default", function( sFilename, sThemeName, tThemeTable )
