@@ -5,7 +5,7 @@
 
 MUI.ThemeLoader = {};
 local ThemeLoader = MUI.ThemeLoader;
-SetGlobalString( "MUI.ThemeLoader.Selected", "" );
+SetGlobalString( "MUI.ThemeLoader.Selected", MUI.Config.ThemeDefault );
 
 function ThemeLoader.BuildThemeTable( )
 	if not ThemeLoader.Themes then
@@ -44,7 +44,7 @@ end
 
 function ThemeLoader.GetSelected( )
 
-	return GetGlobalString( "MUI.ThemeLoader.Selected" );
+	return GetGlobalString( "MUI.ThemeLoader.Selected", MUI.Config.ThemeDefault );
 
 end
 
@@ -69,16 +69,22 @@ function ThemeLoader.LoadTheme( sFilename )
 	
 	Theme = {};
 	include( MUI.Config.ThemeFolder .. sFilename );
-	
-	if ( not Theme.Name ) then
+	local Loaded = ThemeLoader.RegisterTable( Theme, sFilename );
+	Theme = nil;
+
+	return Loaded;
+
+end
+
+function ThemeLoader.RegisterTable( tThemeTable, sFilename )
+	if ( not tThemeTable.Name ) then
 		MUI.Errors.Post( MUI.Config.ThemeFolder .. sFilename, "Failed to load theme!");
 		return false;
 	end
 	
-	local sThemeName = Theme.Name;
+	local sThemeName = tThemeTable.Name;
 	
-	ThemeLoader.Themes[ sThemeName ] = table.Copy( Theme );
-	Theme = nil;
+	ThemeLoader.Themes[ sThemeName ] = table.Copy( tThemeTable );
 	
 	if ( ThemeLoader.Themes[ sThemeName ].Initialize ) then
 		ThemeLoader.Themes[ sThemeName ]:Initialize()
@@ -95,7 +101,6 @@ function ThemeLoader.LoadTheme( sFilename )
 	MUI.Output( "The %s theme was loaded!", sThemeName );
 	
 	return true
-
 end
 
 function ThemeLoader.GetTheme( sThemeName )
