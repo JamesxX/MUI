@@ -30,7 +30,7 @@ function ThemeLoader.SetSelected( sThemeName )
 	local bCanChange = true
 	
 	if ( MUI.Config.CallHooks ) then
-		bCanChange = hook.Call( MUI.Config.ThemeChangeHook, nil, sThemeName );
+		bCanChange = bCanChange and hook.Call( MUI.Config.ThemeChangeHook, nil, sThemeName );
 	end
 	
 	if ( bCanChange ) then
