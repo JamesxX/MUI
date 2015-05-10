@@ -16,6 +16,7 @@ function ThemeLoader.BuildThemeTable( )
 end
 
 function ThemeLoader.SetSelected( sThemeName )
+	MUI.Errors.CheckArguments( "ThemeLoader.SetSelected( sThemeName )", { sThemeName, "string" } );
 	sThemeName = tostring( sThemeName );
 	
 	if ( ThemeLoader.GetSelected() == sThemeName ) then
@@ -64,7 +65,7 @@ function ThemeLoader.LoadThemes( )
 end
 
 function ThemeLoader.LoadTheme( sFilename )
-	
+	MUI.Errors.CheckArguments( "ThemeLoader.LoadTheme( sFilename )", { sFilename, "string" } );
 	ThemeLoader.BuildThemeTable( )
 	
 	Theme = {};
@@ -77,6 +78,9 @@ function ThemeLoader.LoadTheme( sFilename )
 end
 
 function ThemeLoader.RegisterTable( tThemeTable, sFilename )
+
+	MUI.Errors.CheckArguments( "ThemeLoader.RegisterTable( tThemeTable, sFilename )", { tThemeTable, "table" }, { sFilename, "string" } );
+
 	if ( not tThemeTable.Name ) then
 		MUI.Errors.Post( MUI.Config.ThemeFolder .. sFilename, "Failed to load theme!");
 		return false;
@@ -104,6 +108,7 @@ function ThemeLoader.RegisterTable( tThemeTable, sFilename )
 end
 
 function ThemeLoader.GetTheme( sThemeName )
+	MUI.Errors.CheckArguments( "ThemeLoader.GetTheme( sThemeName )", { sThemeName, "string" } );
 	if ( not ThemeLoader.BuildThemeTable( ) ) then return false; end
 	return ThemeLoader.Themes[ sThemeName ] or false;
 end
