@@ -10,9 +10,9 @@ SetGlobalString( "MUI.ThemeLoader.Selected", MUI.Config.ThemeDefault );
 function ThemeLoader.BuildThemeTable( )
 	if not ThemeLoader.Themes then
 		ThemeLoader.Themes = {};
-		return false
+		return false;
 	end
-	return true
+	return true;
 end
 
 function ThemeLoader.SetSelected( sThemeName )
@@ -28,7 +28,7 @@ function ThemeLoader.SetSelected( sThemeName )
 		return false;
 	end
 
-	local bCanChange = true
+	local bCanChange = true;
 	
 	if ( MUI.Config.CallHooks ) then
 		bCanChange = bCanChange and hook.Call( MUI.Config.ThemeChangeHook, nil, sThemeName );
@@ -51,7 +51,7 @@ end
 
 function ThemeLoader.LoadThemes( )
 
-	ThemeLoader.BuildThemeTable( )
+	ThemeLoader.BuildThemeTable( );
 	
 	local Themes = file.Find( MUI.Config.ThemeFolder .. "*.lua" , "LUA"  );
 	
@@ -66,7 +66,7 @@ end
 
 function ThemeLoader.LoadTheme( sFilename )
 	MUI.Errors.CheckArguments( "ThemeLoader.LoadTheme( sFilename )", { sFilename, "string" } );
-	ThemeLoader.BuildThemeTable( )
+	ThemeLoader.BuildThemeTable( );
 	
 	Theme = {};
 	include( MUI.Config.ThemeFolder .. sFilename );
@@ -90,8 +90,17 @@ function ThemeLoader.RegisterTable( tThemeTable, sFilename )
 	
 	ThemeLoader.Themes[ sThemeName ] = table.Copy( tThemeTable );
 	
+	if ( ThemeLoader.Themes[ sThemeName ].Base ) then
+		if ( ThemeLoader.Themes[ ThemeLoader.Themes[ sThemeName ].Base ] ) then
+			local NewBaseTable = table.Copy( ThemeLoader.Themes[ ThemeLoader.Themes[ sThemeName ].Base ] );
+			local NewThemeTable = table.Copy( ThemeLoader.Themes[ ThemeLoader.Themes[ sThemeName ].Base ] );
+			table.Merge( NewBaseTable, NewThemeTable );
+			ThemeLoader.Themes[ sThemeName ] = NewBaseTable;
+		end
+	end
+	
 	if ( ThemeLoader.Themes[ sThemeName ].Initialize ) then
-		ThemeLoader.Themes[ sThemeName ]:Initialize()
+		ThemeLoader.Themes[ sThemeName ]:Initialize();
 	end
 	
 	if ( MUI.Config.CallHooks ) then
@@ -104,7 +113,7 @@ function ThemeLoader.RegisterTable( tThemeTable, sFilename )
 	
 	MUI.Output( "The %s theme was loaded!", sThemeName );
 	
-	return true
+	return true;
 end
 
 function ThemeLoader.GetTheme( sThemeName )

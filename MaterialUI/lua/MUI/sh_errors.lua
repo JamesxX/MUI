@@ -10,9 +10,9 @@ local Errors = MUI.Errors;
 function Errors.BuildLogTable( )
 	if ( not Errors.Log ) then 
 		Errors.Log = {};
-		return false
+		return false;
 	end
-	return true
+	return true;
 end
 
 function Errors.BuildMessage( sFilename, sNature )
@@ -62,7 +62,7 @@ function Errors.CheckArguments( FunctionName, ... )
 		local Given = argument[ 1 ];
 		local RequiredType = argument[ 2 ];
 		
-		if ( not RequiredType ) then continue end
+		if ( not RequiredType ) then continue; end
 		
 		if ( Given == nil or type( Given ) ~= RequiredType ) then
 			MUI.Output( "Error calling %s, Argument %u expected type %s, got %s", FunctionName, _, RequiredType, type( Given ) );
