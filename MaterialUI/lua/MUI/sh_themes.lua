@@ -7,6 +7,12 @@ MUI.ThemeLoader = {};
 local ThemeLoader = MUI.ThemeLoader;
 SetGlobalString( "MUI.ThemeLoader.Selected", MUI.Config.ThemeDefault );
 
+--[[-------------------------------------
+	MUI.ThemeLoader.BuildThemeTable( ) [INTERNAL]
+	Usage: Build the theme table if it doesn't exist.
+	Returns: True if table existed, false if it didn't.
+--]]-------------------------------------
+
 function ThemeLoader.BuildThemeTable( )
 	if not ThemeLoader.Themes then
 		ThemeLoader.Themes = {};
@@ -14,6 +20,13 @@ function ThemeLoader.BuildThemeTable( )
 	end
 	return true;
 end
+
+--[[-------------------------------------
+	MUI.ThemeLoader.SetSelected( sThemeName )
+	Usage: Select a theme
+	Args:  - sThemeName [string] = Theme to select
+	Returns: True if theme was changed, false if not
+--]]-------------------------------------
 
 function ThemeLoader.SetSelected( sThemeName )
 	MUI.Errors.CheckArguments( "ThemeLoader.SetSelected( sThemeName )", { sThemeName, "string" } );
@@ -43,11 +56,22 @@ function ThemeLoader.SetSelected( sThemeName )
 	return false;
 end
 
+--[[-------------------------------------
+	MUI.ThemeLoader.GetSelected( )
+	Usage: Get the selected a theme.
+	Returns: Selected theme or default theme.
+--]]-------------------------------------
+
 function ThemeLoader.GetSelected( )
 
 	return GetGlobalString( "MUI.ThemeLoader.Selected", MUI.Config.ThemeDefault );
 
 end
+
+--[[-------------------------------------
+	MUI.ThemeLoader.LoadThemes( ) [INTERNAL]
+	Usage: Load themes from themes directory
+--]]-------------------------------------
 
 function ThemeLoader.LoadThemes( )
 
@@ -64,6 +88,12 @@ function ThemeLoader.LoadThemes( )
 	end
 end
 
+--[[-------------------------------------
+	MUI.ThemeLoader.LoadTheme( sFilename ) [INTERNAL]
+	Usage: Load theme from themes directory
+	Args:  - sFilename [string] Name for theme file in directory.
+--]]-------------------------------------
+
 function ThemeLoader.LoadTheme( sFilename )
 	MUI.Errors.CheckArguments( "ThemeLoader.LoadTheme( sFilename )", { sFilename, "string" } );
 	ThemeLoader.BuildThemeTable( );
@@ -76,6 +106,13 @@ function ThemeLoader.LoadTheme( sFilename )
 	return Loaded;
 
 end
+
+--[[-------------------------------------
+	MUI.ThemeLoader.RegisterTable( tThemeTable, sFilename ) [INTERNAL]
+	Usage: Register a theme from a table. 
+	Args:  - tThemeTable [table theme] Table containing theme information.
+	       - sFilename [string] Name for theme file in directory.
+--]]-------------------------------------
 
 function ThemeLoader.RegisterTable( tThemeTable, sFilename )
 
@@ -95,6 +132,7 @@ function ThemeLoader.RegisterTable( tThemeTable, sFilename )
 			local NewBaseTable = table.Copy( ThemeLoader.Themes[ ThemeLoader.Themes[ sThemeName ].Base ] );
 			table.Merge( NewBaseTable, ThemeLoader.Themes[ sThemeName ] );
 			ThemeLoader.Themes[ sThemeName ] = NewBaseTable;
+			ThemeLoader.Themes[ sThemeName ].BaseClass = ThemeLoader.Themes[ ThemeLoader.Themes[ sThemeName ].Base ];
 		end
 	end
 	
@@ -115,16 +153,35 @@ function ThemeLoader.RegisterTable( tThemeTable, sFilename )
 	return true;
 end
 
+--[[-------------------------------------
+	MUI.ThemeLoader.GetTheme( sThemeName )
+	Usage: Get the theme table with a given name
+	Args:  - sThemeName [string] Name of the theme to get
+	Returns: ThemeTable [table] or false [bool]
+--]]-------------------------------------
+
 function ThemeLoader.GetTheme( sThemeName )
 	MUI.Errors.CheckArguments( "ThemeLoader.GetTheme( sThemeName )", { sThemeName, "string" } );
 	if ( not ThemeLoader.BuildThemeTable( ) ) then return false; end
 	return ThemeLoader.Themes[ sThemeName ] or false;
 end
 
+--[[-------------------------------------
+	MUI.ThemeLoader.GetThemes( )
+	Usage: Get all the theme tables
+	Returns: ThemeTables [table] or false [bool]
+--]]-------------------------------------
+
 function ThemeLoader.GetThemes( )
 	if ( not ThemeLoader.BuildThemeTable( ) ) then return false; end
 	return ThemeLoader.Themes;
 end
+
+--[[-------------------------------------
+	MUI.ThemeLoader.GetThemeCount( )
+	Usage: Get how many themes are currently registered
+	Returns: ThemeCount [int]
+--]]-------------------------------------
 
 function ThemeLoader.GetThemeCount( )
 	if ( not ThemeLoader.BuildThemeTable( ) ) then return 0; end

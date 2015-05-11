@@ -7,6 +7,11 @@
 MUI.Errors = {};
 local Errors = MUI.Errors;
 
+--[[-------------------------------------
+	MUI.Errors.BuildLogTable( ) [INTERNAL]
+	Usage: Build the Log table if it doesn't exist.
+	Returns: True if table existed, false if it didn't.
+--]]-------------------------------------
 function Errors.BuildLogTable( )
 	if ( not Errors.Log ) then 
 		Errors.Log = {};
@@ -15,10 +20,26 @@ function Errors.BuildLogTable( )
 	return true;
 end
 
+--[[-------------------------------------
+	MUI.Errors.BuildMessage( sFilename, sNature )
+	Usage: Build a soft error string. [INTERNAL]
+	Args:  - sFilename [string] = File in which the error occurred.
+	       - sNature [string] = The error in question.
+	returns: Error message string
+--]]-------------------------------------
+
 function Errors.BuildMessage( sFilename, sNature )
 	MUI.Errors.CheckArguments( "Errors.BuildMessage( sFilename, sNature )", { sFilename, "string" }, { sNature, "string" } );
 	return "Error in file " .. sFilename .. " : " .. sNature;
 end
+
+--[[-------------------------------------
+	MUI.Errors.Post( sFilename, sNature, ... )
+	Usage: Report a soft error.
+	Args:  - sFilename [string] = File in which the error occurred.
+	       - sNature [string] = The error in question.
+		   - ... [any] = Format the sNature string
+--]]-------------------------------------
 
 function Errors.Post( sFilename, sNature, ... )
 	MUI.Errors.CheckArguments( "Errors.Post( sFilename, sNature, ... )", { sFilename, "string" }, { sNature, "string" } );
@@ -29,21 +50,38 @@ function Errors.Post( sFilename, sNature, ... )
 	
 	Errors.BuildLogTable( );
 	
-	table.insert( Errors.Log, {File = sFilename, Nature = sNature} );
+	table.insert( Errors.Log, {File = sFilename, Nature = Format( sNature, ... )} );
 	
 	if ( MUI.Config.CallHooks ) then
-		hook.Call( MUI.Config.ErrorHook, nil, sFilename, sNature );
+		hook.Call( MUI.Config.ErrorHook, nil, sFilename, Format( sNature, ... ) );
 	end
 end
+
+--[[-------------------------------------
+	MUI.Errors.GetLast( )
+	Usage: Get the last soft error.
+	Returns: Last error [table {File, Nature}] or false.
+--]]-------------------------------------
 
 function Errors.GetLast( )
 	if ( not Errors.BuildLogTable( ) ) then return false; end
 	return Errors.Log[ table.Count( Errors.Log ) ] or false;
 end
 
+--[[-------------------------------------
+	MUI.Errors.ClearLog()
+	Usage: Clear the error log.
+--]]-------------------------------------
+
 function Errors.ClearLog( )
 	Errors.Log = nil;
+	Errors.BuildLogTable( );
 end
+
+--[[-------------------------------------
+	MUI.Errors.List()
+	Usage: Iterator, returns Error number [integer], File [string], and Nature [string]
+--]]-------------------------------------
 
 function Errors.List()
 	Errors.BuildLogTable( );
@@ -55,6 +93,14 @@ function Errors.List()
 		end
 	end
 end 
+
+--[[-------------------------------------
+	MUI.Errors.CheckArguments( FunctionName, ... )
+	Usage: Check the arguments passed to the function, soft error if they don't match required type.
+	Args:  - FunctionName [string]
+	       - ... [vargs table {GivenArgument [any], RequiredType [string(/nil for no defined required type)]}]
+	Returns: True if arguments match, false if not.
+--]]-------------------------------------
 
 function Errors.CheckArguments( FunctionName, ... )
 	local Good = true;
