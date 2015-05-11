@@ -10,6 +10,7 @@ if ( SERVER ) then
 
 	AddCSLuaFile( "sh_config.lua" );
 	AddCSLuaFile( "sh_errors.lua" );
+	AddCSLuaFile( "sh_update.lua" );
 	AddCSLuaFile( "sh_themes.lua" );
 	AddCSLuaFile( "sh_hooks.lua" );
 
@@ -17,6 +18,7 @@ end
 
 include( "sh_config.lua" );
 include( "sh_errors.lua" );
+include( "sh_update.lua" );
 include( "sh_themes.lua" );
 include( "sh_hooks.lua" );
 
@@ -38,7 +40,10 @@ end
 function MUI.Initialize( )
 
 	MUI.Output( "Initializing..." );
-
+	
+	-- Check version
+	MUI.CheckVersion( )
+	
 	MUI.ThemeLoader.LoadThemes( );
 	MUI.ThemeLoader.SetSelected( MUI.Config.ThemeDefault );
 	
