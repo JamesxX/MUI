@@ -167,6 +167,16 @@ function ThemeLoader.GetTheme( sThemeName )
 end
 
 --[[-------------------------------------
+	MUI.ThemeLoader.GetCurrentTheme( )
+	Usage: Get then current theme table
+	Returns: ThemeTable [table] or false [bool]
+--]]-------------------------------------
+
+function ThemeLoader.GetCurrentTheme( )
+	return ThemeLoader.GetTheme( ThemeLoader.GetSelected() );
+end
+
+--[[-------------------------------------
 	MUI.ThemeLoader.GetThemes( )
 	Usage: Get all the theme tables
 	Returns: ThemeTables [table] or false [bool]
