@@ -93,8 +93,7 @@ function ThemeLoader.RegisterTable( tThemeTable, sFilename )
 	if ( ThemeLoader.Themes[ sThemeName ].Base ) then
 		if ( ThemeLoader.Themes[ ThemeLoader.Themes[ sThemeName ].Base ] ) then
 			local NewBaseTable = table.Copy( ThemeLoader.Themes[ ThemeLoader.Themes[ sThemeName ].Base ] );
-			local NewThemeTable = table.Copy( ThemeLoader.Themes[ ThemeLoader.Themes[ sThemeName ].Base ] );
-			table.Merge( NewBaseTable, NewThemeTable );
+			table.Merge( NewBaseTable, ThemeLoader.Themes[ sThemeName ] );
 			ThemeLoader.Themes[ sThemeName ] = NewBaseTable;
 		end
 	end
