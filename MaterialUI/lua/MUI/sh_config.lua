@@ -7,7 +7,7 @@
 MUI.Config 				= {};
 
 MUI.Config.Version 			= "1.01";
-MUI.Config.VersionCheck		= "https://api.github.com/repos/JamesxX/MUI/contents/MaterialUI/lua/MUI/sh_config.lua";
+MUI.Config.VersionCheck			= "https://api.github.com/repos/JamesxX/MUI/contents/MaterialUI/lua/MUI/sh_config.lua";
 MUI.Config.Creator 			= "James Swift";
 MUI.Config.CallHooks 			= true;
 
