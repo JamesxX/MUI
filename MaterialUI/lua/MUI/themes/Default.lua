@@ -15,7 +15,7 @@ end
 
 Theme.Name = "Default";
 Theme.FileName = "Default.lua";
-Theme.GwenTexture = Material("");
+Theme.GwenTexture = Material("MUI/Themes/Default/SpriteSheet.png");
 Theme.GoldenRatio = 1.61803398875; -- This is our awesome number that makes everything look pretty. http://en.wikipedia.org/wiki/Golden_ratio
 Theme.ReducedGoldenRatio = Theme.GoldenRatio - 0.25; -- Line height fix for GMod
 
@@ -26,6 +26,8 @@ function Theme:Initialize( )
 	
 	if ( SERVER ) then
 	
+		resource.AddFile( "materials/MUI/Themes/Default/SpriteSheet.png" );
+	
 		resource.AddFile( "resources/fonts/Calibri.ttf" );
 		resource.AddFile( "resources/fonts/OpenSans-Regular.ttf" );
 		resource.AddFile( "resources/fonts/OpenSans-Semibold.ttf" );
@@ -33,6 +35,8 @@ function Theme:Initialize( )
 	else
 	
 		self:CreateFonts()
+		
+		self.DrawCard = self:CreateTextureBorder( 2, 2, 110, 110, 5, 5, 5, 5)
 	
 	end
 
@@ -126,7 +130,11 @@ function Theme:CreateTextureBorder( _x, _y, _w, _h, l, t, r, b )
 	local _r = r / tex:Width();
 	local _b = b / tex:Height();
 	
-	return function( x, y, w, h, col )
+	local x, y, w, h = 0, 0, 110, 110
+	
+	return function( self, x, y, w, h, col, middle )
+		
+		if ( middle == nil ) then middle = true end
 		
 		surface.SetMaterial( mat );
 		if ( col ) then 
@@ -146,7 +154,9 @@ function Theme:CreateTextureBorder( _x, _y, _w, _h, l, t, r, b )
 		surface.DrawTexturedRectUV( x+w-r, y+h-b, r, b, _x+_w-_r, _y+_h-_b, _x+_w, _y+_h );
 		
 		-- middle. 
+		if ( middle ) then
 		surface.DrawTexturedRectUV( x+l, y+t, w-l-r, h-t-b, _x+_l, _y+_t, _x+_w-_r, _y+_h-_b );
+		end
 		surface.DrawTexturedRectUV( x, y+t, l, h-t-b, _x, _y+_t, _x+_l, _y+_h-_b );
 		surface.DrawTexturedRectUV( x+w-r, y+t, r, h-t-b, _x+_w-_r, _y+_t, _x+_w, _y+_h-_b );
 	
@@ -164,7 +174,7 @@ function Theme:CreateTextureNormal( _x, _y, _w, _h )
 	_w = _w / tex:Width();
 	_h = _h / tex:Height();
 		
-	return function( x, y, w, h, col )
+	return function( self, x, y, w, h, col )
 		
 		surface.SetMaterial( mat );
 		
@@ -193,7 +203,7 @@ function Theme:CreateTextureCentered( _x, _y, _w, _h )
 	_w = _w / tex:Width();
 	_h = _h / tex:Height();
 		
-	return function( x, y, w, h, col )
+	return function( self, x, y, w, h, col )
 		
 		x = x + (w-width)*0.5;
 		y = y + (h-height)*0.5;
@@ -241,7 +251,7 @@ function Theme:DrawText( sText, sFont, x, y, color, xAlign, yAlign, iWidth, iFon
 	local LineHeight = self:CalculateLineHeight( iFontHeight )
 	local WordWrap = self:WordWrap( sText, iWidth, sFont );
 	for _, Text in ipairs( WordWrap ) do
-		draw.SimpleText( Text, sFont, x, y + (_-1)*LineHeight, color, xAlign or TEXT_ALIGN_LEFT, yAlign or TEXT_ALIGN_CENTER );
+		draw.SimpleText( Text, sFont, x, y + (_-1)*LineHeight, color, xAlign or TEXT_ALIGN_LEFT, yAlign or TEXT_ALIGN_BOTTOM );
 	end
 end
 -----------------------------------------
