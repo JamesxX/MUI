@@ -23,7 +23,7 @@ end
 function MUI.CheckVersion( )
 
 	HTTP( {
-		url = MUI.Config.VersionCheck,
+		url = MUI.Config.CheckURL,
 		
 		method = "get",
 	
@@ -45,6 +45,9 @@ function MUI.CheckVersion( )
 					_Version = string.gsub( _Version, "\";", "", 1 );
 					if ( _Version ~= MUI.Config.Version ) then
 						MUI.Output( "You are using an out of date version (version %s) of MUI. Current version is %s", MUI.Config.Version, _Version );
+						if ( MUI.Config.CallHooks ) then
+							hook.Call( MUI.Config.BadVersion, nil, MUI.Config.Version, _Version );
+						end
 					end
 				end
 			

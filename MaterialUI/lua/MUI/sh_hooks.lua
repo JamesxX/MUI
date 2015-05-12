@@ -36,3 +36,14 @@ end);
 hook.Add( MUI.Config.ErrorHook, "Default", function( sFilename, sNature )
 
 end);
+
+--[[-------------------------------------
+	MUI.Config.BadVersion [HOOK]
+	Usage: Called when MUI is loaded with an outdated version
+	Args:  - CurrentVersion [string] = The version listed in config.
+	       - UpdateVersion [string] = The version listen on Github.
+--]]-------------------------------------
+
+hook.Add( MUI.Config.BadVersion, "Default", function( CurrentVersion, UpdateVersion )
+
+end);

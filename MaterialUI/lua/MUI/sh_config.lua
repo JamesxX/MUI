@@ -6,9 +6,10 @@
 
 MUI.Config 				= {};
 
-MUI.Config.Version 			= "1.02";
+MUI.Config.Version 			= "1.03";
 MUI.Config.CheckURL			= "https://api.github.com/repos/JamesxX/MUI/contents/MaterialUI/lua/MUI/sh_config.lua";
 MUI.Config.Creator 			= "James Swift";
+MUI.Config.BadVersion			= "MUI.BadVersion";
 MUI.Config.CallHooks 			= true;
 
 MUI.Config.OutputColor 			= Color( 155, 90, 255 );
