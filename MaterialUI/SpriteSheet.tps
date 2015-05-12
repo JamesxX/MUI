@@ -102,11 +102,11 @@
         <key>algorithmSettings</key>
         <struct type="AlgorithmSettings">
             <key>algorithm</key>
-            <enum type="AlgorithmSettings::AlgorithmId">MaxRects</enum>
+            <enum type="AlgorithmSettings::AlgorithmId">Basic</enum>
             <key>freeSizeMode</key>
             <enum type="AlgorithmSettings::AlgorithmFreeSizeMode">Best</enum>
             <key>sizeConstraints</key>
-            <enum type="AlgorithmSettings::SizeConstraints">AnySize</enum>
+            <enum type="AlgorithmSettings::SizeConstraints">POT</enum>
             <key>forceSquared</key>
             <false/>
             <key>forceWordAligned</key>
@@ -189,6 +189,22 @@
         <key>fileList</key>
         <array>
             <filename>rawsprite/card.png</filename>
+            <filename>rawsprite/account4.png</filename>
+            <filename>rawsprite/add184.png</filename>
+            <filename>rawsprite/add186.png</filename>
+            <filename>rawsprite/black399.png</filename>
+            <filename>rawsprite/ellipsis1.png</filename>
+            <filename>rawsprite/folder215.png</filename>
+            <filename>rawsprite/list89.png</filename>
+            <filename>rawsprite/menu55.png</filename>
+            <filename>rawsprite/show6.png</filename>
+            <filename>rawsprite/show8.png</filename>
+            <filename>rawsprite/sms7.png</filename>
+            <filename>rawsprite/three170.png</filename>
+            <filename>rawsprite/thumb53.png</filename>
+            <filename>rawsprite/thumb54.png</filename>
+            <filename>rawsprite/verification24.png</filename>
+            <filename>rawsprite/website12.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>
